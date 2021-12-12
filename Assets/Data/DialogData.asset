@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 274ca34c17f83df49ba7c99222131f1f, type: 3}
+  m_Name: DialogData
+  m_EditorClassIdentifier: 
+  dialogData:
+  - dialogID: 0
+    dialog:
+    - dialog: Hi ! What can I do for you ?
+      choices:
+      - Buy
+      - Leave
+    inventory:
+    - ID: 0
+      quantity: 1
+    - ID: 1
+      quantity: 1
+    - ID: 2
+      quantity: 1
+    - ID: 3
+      quantity: 1
+    - ID: 4
+      quantity: 1
+  - dialogID: 1
+    dialog:
+    - dialog: Hi my lord, the castle has been destroyed by one of our ennemy during
+        your trip
+      choices: []
+    - dialog: We need to find who is it and to rebuild the castle
+      choices: []
+    - dialog: You should ask in the towns around and try to equip yourself better.
+        Here is some gold.
+      choices: []
+    inventory: []

@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1833fd84b29c2840922acc9baf43370, type: 3}
+  m_Name: ItemsData
+  m_EditorClassIdentifier: 
+  itemsData:
+  - ID: 0
+    quantity: 1
+    name: Test
+    texture: {fileID: 21300000, guid: a628c84d3d1312642971baca4defda79, type: 3}
+    cost: 10
+    isEquipable: 1
+    bodyPart: 1
+    isEquipped: 0
+    armorValue: 3
+    isWeapon: 0
+    damageValue: 0
+    requirements: []
+  - ID: 1
+    quantity: 1
+    name: Test2
+    texture: {fileID: 1026483780895729130, guid: 227f69a838db15f4683dec07c9bac76a, type: 3}
+    cost: 20
+    isEquipable: 1
+    bodyPart: 2
+    isEquipped: 0
+    armorValue: 4
+    isWeapon: 0
+    damageValue: 0
+    requirements: []
+  - ID: 2
+    quantity: 1
+    name: Test3
+    texture: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    cost: 30
+    isEquipable: 1
+    bodyPart: 3
+    isEquipped: 0
+    armorValue: 3
+    isWeapon: 0
+    damageValue: 0
+    requirements: []
+  - ID: 3
+    quantity: 1
+    name: Test4
+    texture: {fileID: 21300000, guid: 0fdc8c06a58687e4e8178d28ec139a1b, type: 3}
+    cost: 40
+    isEquipable: 0
+    bodyPart: 0
+    isEquipped: 0
+    armorValue: 0
+    isWeapon: 1
+    damageValue: 20
+    requirements: []
+  - ID: 4
+    quantity: 1
+    name: Stick
+    texture: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    cost: 10
+    isEquipable: 0
+    bodyPart: 0
+    isEquipped: 0
+    armorValue: 0
+    isWeapon: 1
+    damageValue: 2
+    requirements: []
+  - ID: 5
+    quantity: 1
+    name: Leaf
+    texture: {fileID: -3306700031896174662, guid: 227f69a838db15f4683dec07c9bac76a, type: 3}
+    cost: 20
+    isEquipable: 0
+    bodyPart: 0
+    isEquipped: 0
+    armorValue: 0
+    isWeapon: 0
+    damageValue: 0
+    requirements: []
+  - ID: 6
+    quantity: 1
+    name: Potion
+    texture: {fileID: 4301007582732629585, guid: 227f69a838db15f4683dec07c9bac76a, type: 3}
+    cost: 100
+    isEquipable: 0
+    bodyPart: 0
+    isEquipped: 0
+    armorValue: 0
+    isWeapon: 0
+    damageValue: 0
+    requirements:
+    - ID: 5
+      quantity: 3
+  craftData: 0600000003000000
