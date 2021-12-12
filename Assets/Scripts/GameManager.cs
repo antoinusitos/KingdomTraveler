@@ -28,11 +28,11 @@ public class GameManager : MonoBehaviour
     public GameObject storyGameObject = null;
     public Text storyText = null;
     private string[] storyTextInput = new string[] {
-    //"Welcome young master and sorry for the mess in the castle.",
-    //"As you can see your parent's castle has been totally destroyed by one of our enemy.",
-    //"Your people ran away and are now dispatched everywhere.",
-    //"I've marked on your map some locations around the castle to start your investigations.",
-    //"And please find something more serious to wear, people won't follow you and you won't last long wearing that...",
+    "Welcome young master and sorry for the mess in the castle.",
+    "As you can see your parent's castle has been totally destroyed by one of our enemy.",
+    "Your people ran away and are now dispatched everywhere.",
+    "I've marked on your map some locations around the castle to start your investigations.",
+    "And please find something more serious to wear, people won't follow you and you won't last long wearing that...",
     "Good luck !",
     };
 

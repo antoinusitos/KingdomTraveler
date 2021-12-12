@@ -43,6 +43,8 @@ public class UIManager : MonoBehaviour
     public Transform inventoryShopBuying = null;
     public GameObject inventoryShopGameObject = null;
     public GameObject inventoryButtonPrefab = null;
+    public Text shopItemDesc = null;
+    public Text buyItemDesc = null;
 
     public Text inventoryGoldShopCount = null;
 
@@ -424,8 +426,11 @@ public class UIManager : MonoBehaviour
 
     public void FillShopInventory(List<InventoryItem> items)
     {
-        inventoryShop.GetComponent<RectTransform>().sizeDelta = new Vector2(0, items.Count * 30);
-        float pos = 0;
+        //inventoryShop.GetComponent<RectTransform>().sizeDelta = new Vector2(0, items.Count * 30);
+        for (int i = 0; i < inventoryShop.childCount; i++)
+        {
+            Destroy(inventoryShop.GetChild(i).gameObject);
+        }
         for (int i = 0; i < items.Count; i++)
         {
             GameItem gameItem = GameManager.instance.itemsData.GetGameItemWithID(items[i].ID);
@@ -433,7 +438,6 @@ public class UIManager : MonoBehaviour
                 continue;
 
             RectTransform rect = Instantiate(inventoryButtonPrefab, inventoryShop).GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(0, pos);
             string equipableText = "";
             if (gameItem.isEquipable)
             {
@@ -454,10 +458,12 @@ public class UIManager : MonoBehaviour
             {
                 equipableText = "{ Weapon }";
             }
-            rect.GetComponentInChildren<Text>().text = gameItem.name + " X " + items[i].quantity + "\t Cost :" + gameItem.cost + (equipableText != "" ? "\t" + equipableText : "");
+            //rect.GetComponentInChildren<Text>().text = gameItem.name + " X " + items[i].quantity + "\t Cost :" + gameItem.cost + (equipableText != "" ? "\t" + equipableText : "");
+            rect.GetChild(1).GetComponent<Image>().sprite = gameItem.texture;
+            rect.GetComponent<InventoryHoverButton>().descriptionText = shopItemDesc;
+            rect.GetComponent<InventoryHoverButton>().description = gameItem.name + " X " + items[i].quantity + "\t Cost :" + gameItem.cost + (equipableText != "" ? "\t" + equipableText : ""); ;
             GameItem temp = gameItem;
             rect.GetComponent<Button>().onClick.AddListener(delegate { AddItemToBuy(temp); });
-            pos -= 30;
             rect.transform.GetChild(1).GetComponent<Image>().sprite = gameItem.texture;
         }
     }
@@ -468,14 +474,14 @@ public class UIManager : MonoBehaviour
         {
             Destroy(inventoryShopBuying.GetChild(i).gameObject);
         }
-        inventoryShop.GetComponent<RectTransform>().sizeDelta = new Vector2(0, buying.Count * 30);
-        float pos = 0;
+        //inventoryShop.GetComponent<RectTransform>().sizeDelta = new Vector2(0, buying.Count * 30);
         for (int i = 0; i < buying.Count; i++)
         {
             RectTransform rect = Instantiate(inventoryButtonPrefab, inventoryShopBuying).GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(0, pos);
-            rect.GetComponentInChildren<Text>().text = buying[i].name + " X " + buying[i].quantity + "\t Cost : " + buying[i].cost + "\t Total : " + (buying[i].cost * buying[i].quantity);
-            pos -= 30;
+            //rect.GetComponentInChildren<Text>().text = buying[i].name + " X " + buying[i].quantity + "\t Cost : " + buying[i].cost + "\t Total : " + (buying[i].cost * buying[i].quantity);
+            rect.GetChild(1).GetComponent<Image>().sprite = buying[i].texture;
+            rect.GetComponent<InventoryHoverButton>().descriptionText = buyItemDesc;
+            rect.GetComponent<InventoryHoverButton>().description = buying[i].name + " X " + buying[i].quantity + "\t Cost : " + buying[i].cost + "\t Total : " + (buying[i].cost * buying[i].quantity);
             int id = buying[i].ID;
             rect.GetComponent<Button>().onClick.AddListener(delegate { RemoveItemToBuy(id); });
             rect.transform.GetChild(1).GetComponent<Image>().sprite = buying[i].texture;
