@@ -24,6 +24,7 @@ MonoBehaviour:
     armorValue: 3
     isWeapon: 0
     damageValue: 0
+    gameItemType: 1
     requirements: []
   - ID: 1
     quantity: 1
@@ -36,6 +37,20 @@ MonoBehaviour:
     armorValue: 4
     isWeapon: 0
     damageValue: 0
+    gameItemType: 1
+    requirements: []
+  - ID: 7
+    quantity: 1
+    name: Test2BIS
+    texture: {fileID: 21300000, guid: 4680cd1a9c9117346aa2e65a720065a6, type: 3}
+    cost: 20
+    isEquipable: 1
+    bodyPart: 2
+    isEquipped: 0
+    armorValue: 10
+    isWeapon: 0
+    damageValue: 0
+    gameItemType: 1
     requirements: []
   - ID: 2
     quantity: 1
@@ -48,6 +63,7 @@ MonoBehaviour:
     armorValue: 3
     isWeapon: 0
     damageValue: 0
+    gameItemType: 1
     requirements: []
   - ID: 3
     quantity: 1
@@ -60,6 +76,7 @@ MonoBehaviour:
     armorValue: 0
     isWeapon: 1
     damageValue: 20
+    gameItemType: 2
     requirements: []
   - ID: 4
     quantity: 1
@@ -72,6 +89,7 @@ MonoBehaviour:
     armorValue: 0
     isWeapon: 1
     damageValue: 2
+    gameItemType: 2
     requirements: []
   - ID: 5
     quantity: 1
@@ -84,6 +102,7 @@ MonoBehaviour:
     armorValue: 0
     isWeapon: 0
     damageValue: 0
+    gameItemType: 5
     requirements: []
   - ID: 6
     quantity: 1
@@ -96,6 +115,7 @@ MonoBehaviour:
     armorValue: 0
     isWeapon: 0
     damageValue: 0
+    gameItemType: 4
     requirements:
     - ID: 5
       quantity: 3

@@ -47,6 +47,11 @@ public class InventoryManager : MonoBehaviour
                 AddItem(gameItem);
             }
         }
+
+        headItem = null;
+        bodyItem = null;
+        legsItem = null;
+        weaponItem = null;
     }
 
     public void AddItem(GameItem anItem)

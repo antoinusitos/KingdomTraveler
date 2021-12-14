@@ -21,8 +21,14 @@ public class GameItem
     public int armorValue = 0;
     public bool isWeapon = false;
     public int damageValue = 0;
+    public GameItemType gameItemType = GameItemType.NONE;
 
     public ItemRequirement[] requirements = null;
+
+    public GameItem()
+    {
+        ID = -1;
+    }
 
     public GameItem(GameItem copy)
     {
@@ -38,6 +44,7 @@ public class GameItem
         isWeapon = copy.isWeapon;
         damageValue = copy.damageValue;
         requirements = copy.requirements;
+        gameItemType = copy.gameItemType;
     }
 }
 
@@ -54,4 +61,14 @@ public class InventoryItem
 {
     public int ID = -1;
     public int quantity = 0;
+}
+
+public enum GameItemType
+{
+    NONE,
+    CLOTH,
+    WEAPON,
+    SHIELD,
+    ITEM,
+    QUEST
 }

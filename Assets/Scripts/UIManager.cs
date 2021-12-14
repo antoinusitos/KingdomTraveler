@@ -57,11 +57,17 @@ public class UIManager : MonoBehaviour
     public Text inventoryLevelCount = null;
     public Text inventoryDefenseCount = null;
     public Text inventoryAttackCount = null;
-    public Button headItemButton = null;
-    public Button bodyItemButton = null;
-    public Button legsItemButton = null;
-    public Button weaponItemButton = null;
+    private Button headItemButton = null;
+    private Button bodyItemButton = null;
+    private Button legsItemButton = null;
+    private Button weaponItemButton = null;
     public Text descriptionText = null;
+
+    public Button inventoryClothTab = null;
+    public Button inventoryWeaponTab = null;
+    public Button inventoryShieldTab = null;
+    public Button inventoryItemTab = null;
+    public Button inventoryQuestTab = null;
 
     public Slider lifeSlider = null;
     public Slider manaSlider = null;
@@ -117,7 +123,7 @@ public class UIManager : MonoBehaviour
             nextPageToShow = inventoryPage;
             inventoryButton.interactable = false;
             lastButton = inventoryButton;
-            ShowInventory();
+            ShowInventory(GameItemType.CLOTH);
         }
         else if (page == 2)
         {
@@ -141,33 +147,56 @@ public class UIManager : MonoBehaviour
         HiddeAllPages();
     }
 
-    public void RemoveEquippedItem(int anIndex)
+    public void RemoveEquippedItem(GameItemType aType, BodyPart aPart = BodyPart.NONE)
     {
         GameItem anItem = null;
-        if (anIndex == 1)
-            anItem = InventoryManager.instance.headItem;
-        else if (anIndex == 2)
-            anItem = InventoryManager.instance.bodyItem;
-        else if (anIndex == 3)
-            anItem = InventoryManager.instance.legsItem;
-        else if (anIndex == 4)
+        switch(aType)
         {
-            anItem = InventoryManager.instance.weaponItem;
-            if (anItem != null)
-            {
-                MusicManager.instance.PlayActionSound();
-                InventoryManager.instance.weaponItem = null;
-                weaponItemButton.transform.GetChild(1).GetComponent<Image>().sprite = null;
-                weaponItemButton.GetComponent<InventoryHoverButton>().description = "";
-                descriptionText.text = "";
-                InventoryManager.instance.damage -= anItem.damageValue;
-                inventoryAttackCount.text = "Damage : " + InventoryManager.instance.damage;
-            }
-            return;
+            case GameItemType.CLOTH:
+                {
+                    switch(aPart)
+                    {
+                        case BodyPart.HEAD:
+                            {
+                                anItem = InventoryManager.instance.headItem;
+                                break;
+                            }
+                        case BodyPart.BODY:
+                            {
+                                anItem = InventoryManager.instance.bodyItem;
+                                break;
+                            }
+                        case BodyPart.LEGS:
+                            {
+                                anItem = InventoryManager.instance.legsItem;
+                                break;
+                            }
+                    }
+                    break;
+                }
+            case GameItemType.WEAPON:
+                {
+                    anItem = InventoryManager.instance.weaponItem;
+                    if (anItem != null)
+                    {
+                        MusicManager.instance.PlayActionSound();
+                        InventoryManager.instance.weaponItem = null;
+                        InventoryManager.instance.damage -= anItem.damageValue;
+                        UpdateAttackCount();
+                        if (weaponItemButton != null)
+                        {
+                            weaponItemButton.image.color = Color.white;
+                            weaponItemButton = null;
+                        }
+                    }
+                    return;
+                }
         }
 
         if (anItem == null)
             return;
+
+        anItem.isEquipped = false;
 
         switch (anItem.bodyPart)
         {
@@ -175,40 +204,120 @@ public class UIManager : MonoBehaviour
                 {
                     MusicManager.instance.PlayActionSound();
                     InventoryManager.instance.headItem = null;
-                    headItemButton.transform.GetChild(1).GetComponent<Image>().sprite = null;
-                    headItemButton.GetComponent<InventoryHoverButton>().description = "";
-                    descriptionText.text = "";
                     InventoryManager.instance.defense -= anItem.armorValue;
-                    inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+                    if (headItemButton != null)
+                    {
+                        headItemButton.image.color = Color.white;
+                        headItemButton = null;
+                    }
                     break;
                 }
             case BodyPart.BODY:
                 {
                     MusicManager.instance.PlayActionSound();
                     InventoryManager.instance.bodyItem = null;
-                    bodyItemButton.transform.GetChild(1).GetComponent<Image>().sprite = null;
-                    bodyItemButton.GetComponent<InventoryHoverButton>().description = "";
-                    descriptionText.text = "";
                     InventoryManager.instance.defense -= anItem.armorValue;
-                    inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+                    if (bodyItemButton != null)
+                    {
+                        bodyItemButton.image.color = Color.white;
+                        bodyItemButton = null;
+                    }
                     break;
                 }
             case BodyPart.LEGS:
                 {
                     MusicManager.instance.PlayActionSound();
                     InventoryManager.instance.legsItem = null;
-                    legsItemButton.transform.GetChild(1).GetComponent<Image>().sprite = null;
-                    legsItemButton.GetComponent<InventoryHoverButton>().description = "";
-                    descriptionText.text = "";
                     InventoryManager.instance.defense -= anItem.armorValue;
-                    inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+                    if (legsItemButton != null)
+                    {
+                        legsItemButton.image.color = Color.white;
+                        legsItemButton = null;
+                    }
                     break;
                 }
         }
+        UpdateDefenseCount();
     }
 
-    public void ShowInventory()
+    public void EquipItem(GameItem anItem, Button buttonClicked)
     {
+        switch(anItem.gameItemType)
+        {
+            case GameItemType.CLOTH:
+                {
+                    InventoryManager.instance.defense += anItem.armorValue;
+                    switch (anItem.bodyPart)
+                    {
+                        case BodyPart.HEAD:
+                            {
+                                InventoryManager.instance.headItem = anItem;
+                                headItemButton = buttonClicked;
+                                break;
+                            }
+                        case BodyPart.BODY:
+                            {
+                                InventoryManager.instance.bodyItem = anItem;
+                                bodyItemButton = buttonClicked;
+                                break;
+                            }
+                        case BodyPart.LEGS:
+                            {
+                                InventoryManager.instance.legsItem = anItem;
+                                legsItemButton = buttonClicked;
+                                break;
+                            }
+                    }
+                    UpdateDefenseCount();
+                    break;
+                }
+            case GameItemType.WEAPON:
+                {
+                    InventoryManager.instance.weaponItem = anItem;
+                    InventoryManager.instance.damage += anItem.damageValue;
+                    weaponItemButton = buttonClicked;
+                    UpdateAttackCount();
+                    break;
+                }
+        }
+        
+        buttonClicked.image.color = Color.red;
+        anItem.isEquipped = true;
+    }
+    //Type : 1 = Clothes, 2 = Weapons, 3 = Shields, 4 = Items, 5 = Quests
+    public void ShowInventory(int aType)
+    {
+        ShowInventory((GameItemType)aType);
+    }
+
+    //Type : 1 = Clothes, 2 = Weapons, 3 = Shields, 4 = Items, 5 = Quests
+    public void ShowInventory(GameItemType aType)
+    {
+        inventoryClothTab.image.color = Color.white;
+        inventoryWeaponTab.image.color = Color.white;
+        inventoryShieldTab.image.color = Color.white;
+        inventoryItemTab.image.color = Color.white;
+        inventoryQuestTab.image.color = Color.white;
+
+        switch (aType)
+        {
+            case GameItemType.CLOTH:
+                inventoryClothTab.image.color = Color.red;
+                break;
+            case GameItemType.WEAPON:
+                inventoryWeaponTab.image.color = Color.red;
+                break;
+            case GameItemType.SHIELD:
+                inventoryShieldTab.image.color = Color.red;
+                break;
+            case GameItemType.ITEM:
+                inventoryItemTab.image.color = Color.red;
+                break;
+            case GameItemType.QUEST:
+                inventoryQuestTab.image.color = Color.red;
+                break;
+        }
+
         for (int i = 0; i < inventoryPanel.childCount; i++)
         {
             Destroy(inventoryPanel.GetChild(i).gameObject);
@@ -216,6 +325,9 @@ public class UIManager : MonoBehaviour
 
         foreach(KeyValuePair<int,GameItem> item in InventoryManager.instance.inventory)
         {
+            if (item.Value.gameItemType != aType)
+                continue;
+
             RectTransform rect = Instantiate(inventoryButtonPrefab, inventoryPanel).GetComponent<RectTransform>();
 
             string equipableText = "";
@@ -245,8 +357,13 @@ public class UIManager : MonoBehaviour
                 (equipableText != "" ? "\n" + equipableText : "");
             rect.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
 
-
             rect.transform.GetChild(1).GetComponent<Image>().sprite = item.Value.texture;
+
+            if (item.Value.isEquipped)
+            {
+                rect.GetComponent<Button>().image.color = Color.red;
+            }
+
             if (item.Value.isEquipable)
             {
                 switch(item.Value.bodyPart)
@@ -257,18 +374,15 @@ public class UIManager : MonoBehaviour
                                 MusicManager.instance.PlayActionSound();
                                 if (InventoryManager.instance.headItem != null)
                                 {
-                                    InventoryManager.instance.defense -= InventoryManager.instance.headItem.armorValue;
+                                    if (InventoryManager.instance.headItem != null)
+                                    {
+                                        GameItem itemTemp = InventoryManager.instance.headItem;
+                                        RemoveEquippedItem(GameItemType.CLOTH, BodyPart.HEAD);
+                                        if (itemTemp.ID == item.Value.ID)
+                                            return;
+                                    }
                                 }
-                                InventoryManager.instance.headItem = item.Value; 
-                                headItemButton.transform.GetChild(1).GetComponent<Image>().sprite = item.Value.texture;
-                                headItemButton.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
-                                headItemButton.GetComponent<InventoryHoverButton>().description =
-                                item.Value.name + "\n Quantity : " +
-                                item.Value.quantity + "\n Cost : " +
-                                item.Value.cost + "\n Total : " + (item.Value.cost * item.Value.quantity) +
-                                (equipableText != "" ? "\n" + equipableText : "");
-                                InventoryManager.instance.defense += item.Value.armorValue;
-                                inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+                                EquipItem(item.Value, rect.GetComponent<Button>());
                             });
                             break;
                         }
@@ -278,18 +392,15 @@ public class UIManager : MonoBehaviour
                                 MusicManager.instance.PlayActionSound();
                                 if (InventoryManager.instance.bodyItem != null)
                                 {
-                                    InventoryManager.instance.defense -= InventoryManager.instance.bodyItem.armorValue;
+                                    if (InventoryManager.instance.bodyItem != null)
+                                    {
+                                        GameItem itemTemp = InventoryManager.instance.bodyItem;
+                                        RemoveEquippedItem(GameItemType.CLOTH, BodyPart.BODY);
+                                        if (itemTemp.ID == item.Value.ID)
+                                            return;
+                                    }
                                 }
-                                InventoryManager.instance.bodyItem = item.Value; 
-                                bodyItemButton.transform.GetChild(1).GetComponent<Image>().sprite = item.Value.texture;
-                                bodyItemButton.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
-                                bodyItemButton.GetComponent<InventoryHoverButton>().description =
-                                item.Value.name + "\n Quantity : " +
-                                item.Value.quantity + "\n Cost : " +
-                                item.Value.cost + "\n Total : " + (item.Value.cost * item.Value.quantity) +
-                                (equipableText != "" ? "\n" + equipableText : "");
-                                InventoryManager.instance.defense += item.Value.armorValue;
-                                inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+                                EquipItem(item.Value, rect.GetComponent<Button>());
                             });
                             break;
                         }
@@ -299,18 +410,12 @@ public class UIManager : MonoBehaviour
                                 MusicManager.instance.PlayActionSound();
                                 if (InventoryManager.instance.legsItem != null)
                                 {
-                                    InventoryManager.instance.defense -= InventoryManager.instance.legsItem.armorValue;
+                                    GameItem itemTemp = InventoryManager.instance.legsItem;
+                                    RemoveEquippedItem(GameItemType.CLOTH, BodyPart.LEGS);
+                                    if (itemTemp.ID == item.Value.ID)
+                                        return;
                                 }
-                                InventoryManager.instance.legsItem = item.Value; 
-                                legsItemButton.transform.GetChild(1).GetComponent<Image>().sprite = item.Value.texture;
-                                legsItemButton.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
-                                legsItemButton.GetComponent<InventoryHoverButton>().description =
-                                item.Value.name + "\n Quantity : " +
-                                item.Value.quantity + "\n Cost : " +
-                                item.Value.cost + "\n Total : " + (item.Value.cost * item.Value.quantity) +
-                                (equipableText != "" ? "\n" + equipableText : "");
-                                InventoryManager.instance.defense += item.Value.armorValue;
-                                inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+                                EquipItem(item.Value, rect.GetComponent<Button>());
                             });
                             break;
                         }
@@ -322,24 +427,18 @@ public class UIManager : MonoBehaviour
                     MusicManager.instance.PlayActionSound();
                     if (InventoryManager.instance.weaponItem != null)
                     {
-                        InventoryManager.instance.damage -= InventoryManager.instance.weaponItem.damageValue;
+                        GameItem itemTemp = InventoryManager.instance.weaponItem;
+                        RemoveEquippedItem(GameItemType.WEAPON);
+                        if (itemTemp.ID == item.Value.ID)
+                            return;
                     }
-                    InventoryManager.instance.weaponItem = item.Value;
-                    weaponItemButton.transform.GetChild(1).GetComponent<Image>().sprite = item.Value.texture;
-                    weaponItemButton.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
-                    weaponItemButton.GetComponent<InventoryHoverButton>().description =
-                    item.Value.name + "\n Quantity : " +
-                    item.Value.quantity + "\n Cost : " +
-                    item.Value.cost + "\n Total : " + (item.Value.cost * item.Value.quantity) +
-                    (equipableText != "" ? "\n" + equipableText : "");
-                    InventoryManager.instance.damage += item.Value.damageValue;
-                    inventoryAttackCount.text = "Damage : " + InventoryManager.instance.damage;
+                    EquipItem(item.Value, rect.GetComponent<Button>());
                 });
             }
         }
 
-        inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
-        inventoryAttackCount.text = "Damage : " + InventoryManager.instance.damage;
+        UpdateDefenseCount();
+        UpdateAttackCount();
         lifeSlider.value = InventoryManager.instance.life / 100;
         lifeSlider.GetComponentInChildren<Text>().text = "Life : " + InventoryManager.instance.life + " / 100";
         manaSlider.value = InventoryManager.instance.mana / 100;
@@ -349,6 +448,7 @@ public class UIManager : MonoBehaviour
         xpSlider.GetComponentInChildren<Text>().text = "Exp : " + InventoryManager.instance.xp.ToString("F2") + " / " + InventoryManager.instance.xpToNextLevel;
     }
 
+    #region SHOP
     public void ShowShopInventory(bool aState)
     {
         inventoryShopGameObject.SetActive(aState);
@@ -423,10 +523,9 @@ public class UIManager : MonoBehaviour
         cost = 0;
         costText.text = "Cost : " + cost;
     }
-
+    
     public void FillShopInventory(List<InventoryItem> items)
     {
-        //inventoryShop.GetComponent<RectTransform>().sizeDelta = new Vector2(0, items.Count * 30);
         for (int i = 0; i < inventoryShop.childCount; i++)
         {
             Destroy(inventoryShop.GetChild(i).gameObject);
@@ -499,12 +598,23 @@ public class UIManager : MonoBehaviour
         UpdateGoldCount();
         BackFromShopInventory();
     }
-
+    #endregion
     public void UpdateGoldCount()
     {
         inventoryGoldShopCount.text = "Gold : " + InventoryManager.instance.currentGold.ToString("F0");
     }
 
+    public void UpdateDefenseCount()
+    {
+        inventoryDefenseCount.text = "Defense : " + InventoryManager.instance.defense;
+    }
+
+    private void UpdateAttackCount()
+    {
+        inventoryAttackCount.text = "Damage : " + InventoryManager.instance.damage;
+    }
+
+    #region PAGES
     private void HiddeAllPages()
     {
         StartCoroutine("SwitchPage");
@@ -578,4 +688,5 @@ public class UIManager : MonoBehaviour
     {
         townDialogGameObject.SetActive(aState);
     }
+    #endregion
 }

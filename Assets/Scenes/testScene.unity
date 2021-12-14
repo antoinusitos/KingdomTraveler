@@ -9905,10 +9905,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 655982165, guid: 7ba904bab393fb241b062c27c5c57acf, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 918006723, guid: 7ba904bab393fb241b062c27c5c57acf, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -9973,6 +9969,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1683174764}
+    - target: {fileID: 2628747082099250977, guid: 7ba904bab393fb241b062c27c5c57acf, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ba904bab393fb241b062c27c5c57acf, type: 3}
 --- !u!114 &798408148796490196 stripped
@@ -10030,8 +10030,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
+      propertyPath: headItem.ID
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
       propertyPath: defaultItems.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
       propertyPath: defaultItems.Array.data[0].ID
@@ -10054,6 +10058,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
+      propertyPath: defaultItems.Array.data[5].ID
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
       propertyPath: defaultItems.Array.data[0].quantity
       value: 1
       objectReference: {fileID: 0}
@@ -10072,6 +10080,10 @@ PrefabInstance:
     - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
       propertyPath: defaultItems.Array.data[4].quantity
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 140131183, guid: e779738c63022ba468de836d76ff21e5, type: 3}
+      propertyPath: defaultItems.Array.data[5].quantity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1054067781517398395, guid: e779738c63022ba468de836d76ff21e5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10284,7 +10296,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 044c33a9ccc3aa645b16e296627a34a7, type: 2}
     - target: {fileID: 2222857116847056485, guid: d63298174709ca54c9f81c7453bcf6d4, type: 3}
       propertyPath: skipIntro
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2222857116847056485, guid: d63298174709ca54c9f81c7453bcf6d4, type: 3}
       propertyPath: storyText
