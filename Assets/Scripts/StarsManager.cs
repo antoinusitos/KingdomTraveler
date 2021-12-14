@@ -5,15 +5,79 @@ using UnityEngine.UI;
 
 public class StarsManager : MonoBehaviour
 {
+    public static StarsManager instance = null;
+
     public List<Star> starsSelected = new List<Star>();
     public List<int> starsIDSelected = new List<int>();
 
     public StarsData starsData = null;
 
     public Transform starsPanel = null;
+    private RectTransform starsPanelTransform = null;
 
     public Text constellationFoundText = null;
     public Text constellationRewardText = null;
+
+    private Vector2 movePos = Vector2.zero;
+    private float cameraMoveSpeed = 20;
+
+    private const float rightLimit = 2;
+    private const float leftLimit = 368;
+    private const float topLimit = -88;
+    private const float bottomLimit = 88;
+
+    private float lastPosX = rightLimit;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    private void Start()
+    {
+        starsPanelTransform = starsPanel.GetComponent<RectTransform>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1) && GameManager.instance.currentPageType == PageType.STARS)
+        {
+            movePos = Input.mousePosition;
+        }
+        else if (Input.GetMouseButton(1) && GameManager.instance.currentPageType == PageType.STARS)
+        {
+            Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            starsPanelTransform.anchoredPosition -= (movePos - mousePos) * Time.deltaTime * cameraMoveSpeed;
+            if(starsPanelTransform.anchoredPosition.x < rightLimit)
+            {
+                starsPanelTransform.anchoredPosition = new Vector2(rightLimit, starsPanelTransform.anchoredPosition.y);
+            }
+            if (starsPanelTransform.anchoredPosition.x > leftLimit)
+            {
+                starsPanelTransform.anchoredPosition = new Vector2(leftLimit, starsPanelTransform.anchoredPosition.y);
+            }
+            if (starsPanelTransform.anchoredPosition.y < topLimit)
+            {
+                starsPanelTransform.anchoredPosition = new Vector2(starsPanelTransform.anchoredPosition.x, topLimit);
+            }
+            if (starsPanelTransform.anchoredPosition.y > bottomLimit)
+            {
+                starsPanelTransform.anchoredPosition = new Vector2(starsPanelTransform.anchoredPosition.x, bottomLimit);
+            }
+            lastPosX = starsPanelTransform.anchoredPosition.x;
+            movePos = Input.mousePosition;
+        }
+    }
+
+    public void MovePanelOutsideOfView()
+    {
+        starsPanelTransform.anchoredPosition = new Vector2(rightLimit, starsPanelTransform.anchoredPosition.y);
+    }
+
+    public void RevertToLastPosX()
+    {
+        starsPanelTransform.anchoredPosition = new Vector2(lastPosX, starsPanelTransform.anchoredPosition.y);
+    }
 
     public void AddSelectedStar(Star aStar)
     {
@@ -116,7 +180,6 @@ public class StarsManager : MonoBehaviour
     {
         GameObject NewObj = new GameObject("StarsLink");
         Image NewImage = NewObj.AddComponent<Image>();
-        //NewImage.sprite = lineImage;
         NewImage.color = col;
         RectTransform rect = NewObj.GetComponent<RectTransform>();
         rect.anchorMin = Vector2.zero;

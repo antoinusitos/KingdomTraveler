@@ -117,6 +117,8 @@ public class UIManager : MonoBehaviour
             nextPageToShow = townPage;
             townButton.interactable = false;
             lastButton = townButton;
+            GameManager.instance.lastPageType = GameManager.instance.currentPageType;
+            GameManager.instance.currentPageType = PageType.TOWN;
         }
         else if (page == 1)
         {
@@ -124,6 +126,8 @@ public class UIManager : MonoBehaviour
             inventoryButton.interactable = false;
             lastButton = inventoryButton;
             ShowInventory(GameItemType.CLOTH);
+            GameManager.instance.lastPageType = GameManager.instance.currentPageType;
+            GameManager.instance.currentPageType = PageType.INVENTORY;
         }
         else if (page == 2)
         {
@@ -131,17 +135,24 @@ public class UIManager : MonoBehaviour
             craftButton.interactable = false;
             lastButton = craftButton;
             CraftManager.instance.UpdateCraftList();
+            GameManager.instance.lastPageType = GameManager.instance.currentPageType;
+            GameManager.instance.currentPageType = PageType.CRAFT;
         }
         else if(page == 3)
         {
             nextPageToShow = starsPage;
             starsButton.interactable = false;
             lastButton = starsButton;
+            GameManager.instance.lastPageType = GameManager.instance.currentPageType;
+            GameManager.instance.currentPageType = PageType.STARS;
+            StarsManager.instance.RevertToLastPosX();
         }
         else if(page == -1)
         {
             mapButton.interactable = false;
             lastButton = mapButton;
+            GameManager.instance.lastPageType = GameManager.instance.currentPageType;
+            GameManager.instance.currentPageType = PageType.INVENTORY;
         }
         MusicManager.instance.PlayActionSound();
         HiddeAllPages();
@@ -641,6 +652,9 @@ public class UIManager : MonoBehaviour
         }
         else if (!mustShow && pageToShow != null)
         {
+            if (GameManager.instance.lastPageType == PageType.STARS)
+                StarsManager.instance.MovePanelOutsideOfView();
+
             isSwitching = true;
             while (pageToShow.anchoredPosition.x > -pageToShow.rect.width - (borderSize * 2))
             {

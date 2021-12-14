@@ -3,9 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum PageType
+{
+    MAP,
+    INVENTORY,
+    STARS,
+    CRAFT,
+    TOWN
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
+
+    public PageType currentPageType = PageType.MAP;
+    public PageType lastPageType = PageType.MAP;
 
     public GameObject uiManager = null;
 
