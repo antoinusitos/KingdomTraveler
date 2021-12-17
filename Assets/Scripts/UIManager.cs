@@ -295,6 +295,19 @@ public class UIManager : MonoBehaviour
         buttonClicked.image.color = Color.red;
         anItem.isEquipped = true;
     }
+
+    public void ConsumeItem(GameItem anItem, Button aButton)
+    {
+        int newQuantity = InventoryManager.instance.GetItemQuantity(anItem.ID);
+        newQuantity--;
+        InventoryManager.instance.SetItemQuantity(anItem.ID, newQuantity);
+        if (newQuantity <= 0)
+        {
+            Destroy(aButton.gameObject);
+            descriptionText.text = "";
+        }
+    }
+
     //Type : 1 = Clothes, 2 = Weapons, 3 = Shields, 4 = Items, 5 = Quests
     public void ShowInventory(int aType)
     {
@@ -341,7 +354,7 @@ public class UIManager : MonoBehaviour
 
             RectTransform rect = Instantiate(inventoryButtonPrefab, inventoryPanel).GetComponent<RectTransform>();
 
-            string equipableText = "";
+            /*string equipableText = "";
             if (item.Value.isEquipable)
             {
                 switch (item.Value.bodyPart)
@@ -366,7 +379,9 @@ public class UIManager : MonoBehaviour
                 item.Value.quantity + "\n Cost : " +
                 item.Value.cost + "\n Total : " + (item.Value.cost * item.Value.quantity) +
                 (equipableText != "" ? "\n" + equipableText : "");
+            Debug.Log(item.Value.name + ":" + item.Value.quantity);*/
             rect.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
+            rect.GetComponent<InventoryHoverButton>().anItem = item.Value;
 
             rect.transform.GetChild(1).GetComponent<Image>().sprite = item.Value.texture;
 
@@ -377,7 +392,7 @@ public class UIManager : MonoBehaviour
 
             if (item.Value.isEquipable)
             {
-                switch(item.Value.bodyPart)
+                switch (item.Value.bodyPart)
                 {
                     case BodyPart.HEAD:
                         {
@@ -432,7 +447,7 @@ public class UIManager : MonoBehaviour
                         }
                 }
             }
-            else if(item.Value.isWeapon)
+            else if (item.Value.isWeapon)
             {
                 rect.GetComponent<Button>().onClick.AddListener(delegate {
                     MusicManager.instance.PlayActionSound();
@@ -446,14 +461,21 @@ public class UIManager : MonoBehaviour
                     EquipItem(item.Value, rect.GetComponent<Button>());
                 });
             }
+            else if (item.Value.gameItemType == GameItemType.ITEM)
+            {
+                rect.GetComponent<Button>().onClick.AddListener(delegate {
+                    MusicManager.instance.PlayActionSound();
+                    InventoryManager.instance.TakeDamage(-10);
+                    ConsumeItem(item.Value, rect.GetComponent<Button>());
+                });
+            }
         }
 
         UpdateDefenseCount();
         UpdateAttackCount();
-        lifeSlider.value = InventoryManager.instance.life / 100;
-        lifeSlider.GetComponentInChildren<Text>().text = "Life : " + InventoryManager.instance.life + " / 100";
+        InventoryManager.instance.RefreshLifeStatus();
         manaSlider.value = InventoryManager.instance.mana / 100;
-        manaSlider.GetComponentInChildren<Text>().text = "Mana : " + InventoryManager.instance.mana + " / 100";
+        manaSlider.GetComponentInChildren<Text>().text = "Mana : " + InventoryManager.instance.mana.ToString("F2") + " / 100";
         inventoryLevelCount.text = "Level : " + InventoryManager.instance.level;
         xpSlider.value = InventoryManager.instance.xp / InventoryManager.instance.xpToNextLevel;
         xpSlider.GetComponentInChildren<Text>().text = "Exp : " + InventoryManager.instance.xp.ToString("F2") + " / " + InventoryManager.instance.xpToNextLevel;

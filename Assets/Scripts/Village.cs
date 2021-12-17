@@ -230,9 +230,7 @@ public class Village : MonoBehaviour
                     resultText.text = "Critical Success, twice damage !";
                     float damage = (currentEnemy.damage * 2) - InventoryManager.instance.defense;
                     if (damage < 0) damage = 0;
-                    InventoryManager.instance.life -= damage;
-                    playerLifeSlider.value = InventoryManager.instance.life / 100.0f;
-                    playerLifeSliderText.text = "Life : " + InventoryManager.instance.life.ToString("F2") + " / 100";
+                    InventoryManager.instance.TakeDamage(damage);
                 }
                 else
                 {
@@ -240,10 +238,8 @@ public class Village : MonoBehaviour
                     float randTemp = rand / 10.0f; // convert rand for percent
                     float damage = (currentEnemy.damage * randTemp) - InventoryManager.instance.defense;
                     if (damage < 0) damage = 0;
-                    InventoryManager.instance.life -= damage;
                     resultText.text = "You take " + (damage).ToString("F2") + " damage";
-                    playerLifeSlider.value = InventoryManager.instance.life / 100.0f;
-                    playerLifeSliderText.text = "Life : " + InventoryManager.instance.life.ToString("F2") + " / 100";
+                    InventoryManager.instance.TakeDamage(damage);
 
                 }
                 yield return new WaitForSeconds(2);
@@ -319,9 +315,7 @@ public class Village : MonoBehaviour
                     if (rand == 1)
                     {
                         resultText.text = "Critical fail, you cannot escape !";
-                        InventoryManager.instance.life -= currentEnemy.damage;
-                        playerLifeSlider.value = InventoryManager.instance.life / InventoryManager.instance.maxLife;
-                        playerLifeSliderText.text = "Life : " + InventoryManager.instance.life.ToString("F2") + " / " + InventoryManager.instance.maxLife;
+                        InventoryManager.instance.TakeDamage(currentEnemy.damage);
                         yield return new WaitForSeconds(1);
                         resultText.text = "You take a damage from the bandit.";
                         yield return new WaitForSeconds(1);

@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject console = null;
 
+    private bool ReadyToContinue = true;
+    public GameObject clickToContinue = null;
+
     private void Awake()
     {
         instance = this;
@@ -88,12 +91,24 @@ public class GameManager : MonoBehaviour
                 storyText.text += storyTextInput[i][l];
                 yield return letterTime;
             }
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(0.2f);
+            ReadyToContinue = false;
+            clickToContinue.SetActive(true);
+            while (!ReadyToContinue)
+            {
+                yield return null;
+            }
             storyText.text = "";
         }
         InventoryManager.instance.AddGold(100);
         storyGameObject.SetActive(false);
         StartGame();
+    }
+
+    public void SetReadyToContinue()
+    {
+        ReadyToContinue = true;
+        clickToContinue.SetActive(false);
     }
 
     private void StartGame()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -29,6 +30,9 @@ public class InventoryManager : MonoBehaviour
 
     public float horseSpeed = 2.0f;
 
+    public Slider playerLifeSlider = null;
+    public Text playerLifeSliderText = null;
+
     private void Awake()
     {
         instance = this;
@@ -52,6 +56,14 @@ public class InventoryManager : MonoBehaviour
         bodyItem = null;
         legsItem = null;
         weaponItem = null;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            TakeDamage(20);
+        }
     }
 
     public void AddItem(GameItem anItem)
@@ -138,5 +150,28 @@ public class InventoryManager : MonoBehaviour
         }
 
         return quantity;
+    }
+
+    public void SetItemQuantity(int anID, int aQuantity)
+    {
+        if (inventory.ContainsKey(anID))
+        {
+            if (aQuantity <= 0)
+                inventory.Remove(anID);
+            else
+                inventory[anID].quantity = aQuantity;
+        }
+    }
+
+    public void TakeDamage(float aDamage)
+    {
+        life -= aDamage;
+        RefreshLifeStatus();
+    }
+
+    public void RefreshLifeStatus()
+    {
+        playerLifeSlider.value = life / maxLife;
+        playerLifeSliderText.text = "Life : " + life.ToString("F2") + " / " + maxLife;
     }
 }
