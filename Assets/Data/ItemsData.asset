@@ -25,6 +25,9 @@ MonoBehaviour:
     isWeapon: 0
     damageValue: 0
     gameItemType: 1
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 1
     quantity: 1
@@ -38,6 +41,9 @@ MonoBehaviour:
     isWeapon: 0
     damageValue: 0
     gameItemType: 1
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 7
     quantity: 1
@@ -51,6 +57,9 @@ MonoBehaviour:
     isWeapon: 0
     damageValue: 0
     gameItemType: 1
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 2
     quantity: 1
@@ -64,6 +73,9 @@ MonoBehaviour:
     isWeapon: 0
     damageValue: 0
     gameItemType: 1
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 3
     quantity: 1
@@ -77,6 +89,9 @@ MonoBehaviour:
     isWeapon: 1
     damageValue: 20
     gameItemType: 2
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 4
     quantity: 1
@@ -90,6 +105,9 @@ MonoBehaviour:
     isWeapon: 1
     damageValue: 2
     gameItemType: 2
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 5
     quantity: 1
@@ -103,6 +121,9 @@ MonoBehaviour:
     isWeapon: 0
     damageValue: 0
     gameItemType: 5
+    usableEffect:
+      usableItemType: 0
+      value: 0
     requirements: []
   - ID: 6
     quantity: 1
@@ -116,6 +137,27 @@ MonoBehaviour:
     isWeapon: 0
     damageValue: 0
     gameItemType: 4
+    usableEffect:
+      usableItemType: 0
+      value: 0
+    requirements:
+    - ID: 5
+      quantity: 3
+  - ID: 8
+    quantity: 1
+    name: Star Clue
+    texture: {fileID: 21300000, guid: 7507413bd65dcad45b4e5bbc8915bd11, type: 3}
+    cost: 100
+    isEquipable: 0
+    bodyPart: 0
+    isEquipped: 0
+    armorValue: 0
+    isWeapon: 0
+    damageValue: 0
+    gameItemType: 5
+    usableEffect:
+      usableItemType: 2
+      value: 0
     requirements:
     - ID: 5
       quantity: 3

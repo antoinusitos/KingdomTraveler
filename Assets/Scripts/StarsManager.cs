@@ -28,6 +28,8 @@ public class StarsManager : MonoBehaviour
 
     private float lastPosX = rightLimit;
 
+    public Image starClue = null;
+
     private void Awake()
     {
         instance = this;

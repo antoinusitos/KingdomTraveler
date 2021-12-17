@@ -353,33 +353,6 @@ public class UIManager : MonoBehaviour
                 continue;
 
             RectTransform rect = Instantiate(inventoryButtonPrefab, inventoryPanel).GetComponent<RectTransform>();
-
-            /*string equipableText = "";
-            if (item.Value.isEquipable)
-            {
-                switch (item.Value.bodyPart)
-                {
-                    case BodyPart.BODY:
-                        equipableText = "{ Body } \n Armor : " + item.Value.armorValue;
-                        break;
-                    case BodyPart.HEAD:
-                        equipableText = "{ Head } \n Armor : " + item.Value.armorValue;
-                        break;
-                    case BodyPart.LEGS:
-                        equipableText = "{ Legs } \n Armor : " + item.Value.armorValue;
-                        break;
-                }
-            }
-            else if (item.Value.isWeapon)
-            {
-                equipableText = "{ Weapon } \n Damage : " + item.Value.damageValue;
-            }
-            rect.GetComponent<InventoryHoverButton>().description =
-                item.Value.name + "\n Quantity : " +
-                item.Value.quantity + "\n Cost : " +
-                item.Value.cost + "\n Total : " + (item.Value.cost * item.Value.quantity) +
-                (equipableText != "" ? "\n" + equipableText : "");
-            Debug.Log(item.Value.name + ":" + item.Value.quantity);*/
             rect.GetComponent<InventoryHoverButton>().descriptionText = descriptionText;
             rect.GetComponent<InventoryHoverButton>().anItem = item.Value;
 
@@ -467,6 +440,32 @@ public class UIManager : MonoBehaviour
                     MusicManager.instance.PlayActionSound();
                     InventoryManager.instance.TakeDamage(-10);
                     ConsumeItem(item.Value, rect.GetComponent<Button>());
+                });
+            }
+            else if (item.Value.gameItemType == GameItemType.QUEST)
+            {
+                rect.GetComponent<Button>().onClick.AddListener(delegate {
+                    MusicManager.instance.PlayActionSound();
+                    if(item.Value.usableEffect != null)
+                    {
+                        if(item.Value.usableEffect.usableItemType == UsableItemType.STARCLUE)
+                        {
+                            if (!item.Value.isEquipped)
+                            {
+                                rect.GetComponent<Button>().image.color = Color.red;
+                                item.Value.isEquipped = true;
+                                StarsManager.instance.starClue.sprite = item.Value.texture;
+                                StarsManager.instance.starClue.gameObject.SetActive(true);
+                            }
+                            else
+                            {
+                                rect.GetComponent<Button>().image.color = Color.white;
+                                item.Value.isEquipped = false;
+                                StarsManager.instance.starClue.gameObject.SetActive(false);
+                            }
+                        }
+                    }
+                    
                 });
             }
         }

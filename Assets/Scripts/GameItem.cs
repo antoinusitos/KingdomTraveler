@@ -22,6 +22,7 @@ public class GameItem
     public bool isWeapon = false;
     public int damageValue = 0;
     public GameItemType gameItemType = GameItemType.NONE;
+    public UsableEffects usableEffect = null;
 
     public ItemRequirement[] requirements = null;
 
@@ -45,6 +46,7 @@ public class GameItem
         damageValue = copy.damageValue;
         requirements = copy.requirements;
         gameItemType = copy.gameItemType;
+        usableEffect = copy.usableEffect;
     }
 }
 
@@ -71,4 +73,18 @@ public enum GameItemType
     SHIELD,
     ITEM,
     QUEST
+}
+
+[System.Serializable]
+public class UsableEffects
+{
+    public UsableItemType usableItemType = UsableItemType.NONE;
+    public float value = 0;
+}
+
+public enum UsableItemType
+{
+    NONE,
+    POTION,
+    STARCLUE
 }
