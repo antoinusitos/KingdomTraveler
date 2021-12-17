@@ -39,19 +39,15 @@ public class GameManager : MonoBehaviour
 
     public GameObject storyGameObject = null;
     public Text storyText = null;
-    private string[] storyTextInput = new string[] {
-    "Welcome young master and sorry for the mess in the castle.",
-    "As you can see your parent's castle has been totally destroyed by one of our enemy.",
-    "Your people ran away and are now dispatched everywhere.",
-    "I've marked on your map some locations around the castle to start your investigations.",
-    "And please find something more serious to wear, people won't follow you and you won't last long wearing that...",
-    "Good luck !",
-    };
 
     public GameObject console = null;
 
     private bool ReadyToContinue = true;
     public GameObject clickToContinue = null;
+	private int gameStoryDialogID = 1;
+
+    private bool skipTextAnim = false;
+    private bool isInIntro = false;
 
     private void Awake()
     {
@@ -76,6 +72,11 @@ public class GameManager : MonoBehaviour
         {
             console.SetActive(!console.activeSelf);
         }
+
+        if(Input.GetMouseButtonDown(0) && isInIntro)
+        {
+            skipTextAnim = true;
+        }
     }
 
     private IEnumerator StartIntro()
@@ -84,13 +85,26 @@ public class GameManager : MonoBehaviour
         storyGameObject.SetActive(true);
         storyText.text = "";
         WaitForSeconds letterTime = new WaitForSeconds(0.05f);
-        for (int i = 0; i < storyTextInput.Length; i++)
+        DialogContainer gameStoryDialogContainer = dialogData.GetDialogContainerWithID(gameStoryDialogID);
+        Dialog[] storyDialog = gameStoryDialogContainer.dialog.ToArray();
+        for (int i = 0; i < storyDialog.Length; i++)
         {
-            for (int l = 0; l < storyTextInput[i].Length; l++)
+            isInIntro = true;
+            for (int l = 0; l < storyDialog[i].dialog.Length; l++)
             {
-                storyText.text += storyTextInput[i][l];
+                if(skipTextAnim)
+                {
+                    skipTextAnim = false;
+                    for (int l2 = l; l2 < storyDialog[i].dialog.Length; l2++)
+                    {
+                        storyText.text += storyDialog[i].dialog[l2];
+                    }
+                    break;
+                }
+                storyText.text += storyDialog[i].dialog[l];
                 yield return letterTime;
             }
+            isInIntro = false;
             yield return new WaitForSeconds(0.2f);
             ReadyToContinue = false;
             clickToContinue.SetActive(true);
