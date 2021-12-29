@@ -44,12 +44,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 070adf3e42f395c46b80854b09e669d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentPageType: 0
+  lastPageType: 0
   uiManager: {fileID: 0}
   isInTown: 1
   isInMenu: 0
   isMoving: 0
   townData: {fileID: 11400000, guid: 083f5b22707228146b1e4ab344af6518, type: 2}
   dialogData: {fileID: 11400000, guid: c6789d6ad7de7504380be33ae438c163, type: 2}
+  itemsData: {fileID: 11400000, guid: 044c33a9ccc3aa645b16e296627a34a7, type: 2}
+  questsData: {fileID: 11400000, guid: 8d6d83597f8761e45b7cdea5804e03b2, type: 2}
+  gameWaiting: 1
+  skipIntro: 0
+  cameraManager: {fileID: 0}
+  storyGameObject: {fileID: 0}
+  storyText: {fileID: 0}
+  console: {fileID: 0}
+  clickToContinue: {fileID: 0}
 --- !u!120 &2222857116847056491
 LineRenderer:
   m_ObjectHideFlags: 0

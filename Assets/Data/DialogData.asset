@@ -30,6 +30,8 @@ MonoBehaviour:
       quantity: 1
     - ID: 4
       quantity: 1
+    - ID: 8
+      quantity: 1
   - dialogID: 1
     dialog:
     - dialog: Welcome young master and sorry for the mess in the castle.

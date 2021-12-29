@@ -223,8 +223,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: d60745ce199c39442bb229cdd1b1369b, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -291,3 +291,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionText: {fileID: 0}
   description: 
+  anItem:
+    ID: -1
+    quantity: 0
+    name: 
+    texture: {fileID: 0}
+    cost: 0
+    isEquipable: 0
+    bodyPart: 0
+    isEquipped: 0
+    armorValue: 0
+    isWeapon: 0
+    damageValue: 0
+    gameItemType: 0
+    usableEffect:
+      usableItemType: 0
+      value: 0
+    requirements: []

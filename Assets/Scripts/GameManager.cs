@@ -9,7 +9,8 @@ public enum PageType
     INVENTORY,
     STARS,
     CRAFT,
-    TOWN
+    TOWN,
+    QUEST
 }
 
 public class GameManager : MonoBehaviour
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     public TownData townData = null;
     public DialogData dialogData = null;
     public ItemsData itemsData = null;
+    public QuestsData questsData = null;
 
     public bool gameWaiting = true;
 
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour
             storyText.text = "";
         }
         InventoryManager.instance.AddGold(100);
+        QuestManager.instance.AddQuest(questsData.GetQuestWithID(0));
         storyGameObject.SetActive(false);
         StartGame();
     }

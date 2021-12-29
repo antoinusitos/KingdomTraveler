@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public Button inventoryButton = null;
     public Button craftButton = null;
     public Button starsButton = null;
+    public Button questButton = null;
     private Button lastButton = null;
 
     public RectTransform townPage = null;
@@ -19,6 +20,7 @@ public class UIManager : MonoBehaviour
     public RectTransform craftPage = null;
     public RectTransform castlePage = null;
     public RectTransform starsPage = null;
+    public RectTransform questPage = null;
 
     public Text townDialogText = null;
     public GameObject townDialogGameObject = null;
@@ -86,6 +88,7 @@ public class UIManager : MonoBehaviour
         craftPage.anchoredPosition = vec;
         castlePage.anchoredPosition = vec;
         starsPage.anchoredPosition = vec;
+        questPage.anchoredPosition = vec;
     }
 
     private void Start()
@@ -146,6 +149,15 @@ public class UIManager : MonoBehaviour
             GameManager.instance.lastPageType = GameManager.instance.currentPageType;
             GameManager.instance.currentPageType = PageType.STARS;
             StarsManager.instance.RevertToLastPosX();
+        }
+        else if (page == 4)
+        {
+            nextPageToShow = questPage;
+            questButton.interactable = false;
+            lastButton = questButton;
+            GameManager.instance.lastPageType = GameManager.instance.currentPageType;
+            GameManager.instance.currentPageType = PageType.QUEST;
+            QuestManager.instance.RefreshQuests();
         }
         else if(page == -1)
         {
