@@ -13,6 +13,7 @@ public class GameItem
     public int ID = -1;
     public int quantity = 0;
     public string name = "";
+    public string description = "";
     public Sprite texture;
     public int cost = 0;
     public bool isEquipable = false;
@@ -36,6 +37,7 @@ public class GameItem
         ID = copy.ID;
         quantity = copy.quantity;
         name = copy.name;
+        description = copy.description;
         texture = copy.texture;
         cost = copy.cost;
         isEquipable = copy.isEquipable;

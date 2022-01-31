@@ -33,6 +33,14 @@ public class InventoryManager : MonoBehaviour
     public Slider playerLifeSlider = null;
     public Text playerLifeSliderText = null;
 
+    public GameObject receiveItemPanel = null;
+    public Text receiveItemTitle = null;
+    public Text receiveItemDesc = null;
+    public Image receiveItemImage = null;
+    private bool isWaitingForInput = false;
+    private bool itemJustAdded = false;
+
+
     private void Awake()
     {
         instance = this;
@@ -52,10 +60,23 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
+        isWaitingForInput = false;
+        receiveItemPanel.SetActive(false);
+
         headItem = null;
         bodyItem = null;
         legsItem = null;
         weaponItem = null;
+    }
+
+    public bool GetItemJustAdded()
+    {
+        if(itemJustAdded)
+        {
+            itemJustAdded = false;
+            return true;
+        }
+        return false;
     }
 
     private void Update()
@@ -64,10 +85,27 @@ public class InventoryManager : MonoBehaviour
         {
             TakeDamage(20);
         }
+
+        if(isWaitingForInput && InputManager.instance.GetInputDone())
+        {
+            ItemJustAdded();
+        }
+    }
+
+    private void ItemJustAdded()
+    {
+        isWaitingForInput = false;
+        receiveItemPanel.SetActive(false);
+        itemJustAdded = true;
     }
 
     public void AddItem(GameItem anItem)
     {
+        receiveItemPanel.SetActive(true);
+        receiveItemTitle.text = anItem.name;
+        receiveItemDesc.text = anItem.description;
+        receiveItemImage.sprite = anItem.texture;
+        isWaitingForInput = true;
         if (inventory.ContainsKey(anItem.ID))
         {
             inventory[anItem.ID].quantity += anItem.quantity;
@@ -110,11 +148,20 @@ public class InventoryManager : MonoBehaviour
 
     public void AddGold(float aValue)
     {
+        receiveItemPanel.SetActive(true);
+        receiveItemTitle.text = "Gold x " + (int)aValue;
+        receiveItemDesc.text = "Basic resource to trade";
+        InputManager.instance.SetWaitingForInput();
         StartCoroutine(AddGoldAnim(aValue));
     }
 
     private IEnumerator AddGoldAnim(float aValue)
     {
+        while(!InputManager.instance.GetInputDone())
+        {
+            yield return null;
+        }
+
         float before = currentGold;
         float timer = 0;
         while(timer < 1)
@@ -126,6 +173,7 @@ public class InventoryManager : MonoBehaviour
         }
         currentGold = before + aValue;
         UIManager.instance.UpdateGoldCount();
+        ItemJustAdded();
     }
 
     public void CheckLevelUp()

@@ -26,16 +26,17 @@ public class SeasonManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        seasonSlider.value = currentTime / seasonLegth;
     }
 
-    private void Update()
+    public void MoveForward()
     {
         currentTime += Time.deltaTime * seasonSpeed;
         seasonSlider.value = currentTime / seasonLegth;
         if (currentTime >= seasonLegth)
         {
             currentTime = 0;
-            switch(currentSeason)
+            switch (currentSeason)
             {
                 case Season.SPRING:
                     {
@@ -60,5 +61,10 @@ public class SeasonManager : MonoBehaviour
             }
             seasonText.text = "Season : " + currentSeason;
         }
+    }
+
+    private void Update()
+    {
+        
     }
 }

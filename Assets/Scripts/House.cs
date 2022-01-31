@@ -2,50 +2,56 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+public enum HouseType
+{
+    NONE,
+    TAVERN,
+    SHOP
+}
+
 public class House : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField]
     private string houseName = "";
 
-    [SerializeField]
-    private int houseID = -1;
-    [SerializeField]
-
-    private int dialogID = -1;
+    public int houseID = -1;
 
     private Image image = null;
 
     [SerializeField]
     private GameObject houseBackground = null;
 
-    DialogContainer dialogContainer;
+    private bool isActive = false;
+
+    public HouseType houseType = HouseType.NONE;
+
+    private AI localAI = null;
+
+
+    private void Start()
+    {
+        image = GetComponent<Image>();
+        localAI = GetComponentInChildren<AI>();
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        UIManager.instance.ShowCharacter(true);
-        UIManager.instance.ShowTownDialogGameObject(true);
-        if(dialogID != -1)
+        AI interaction = GetComponent<AI>();
+        if(interaction != null)
         {
-            dialogContainer = GameManager.instance.dialogData.GetDialogContainerWithID(dialogID);
-            if (dialogContainer.dialog != null && dialogContainer.dialog.Count > 0)
-            {
-                UIManager.instance.SetTownDialogText(dialogContainer.dialog[0].dialog);
-                UIManager.instance.choices.SetActive(true);
-                ChoiceManager.instance.SetChoices(dialogContainer.dialog[0].choices);
-            }
-            ChoiceManager.instance.dialogContainer = dialogContainer;
-            UIManager.instance.FillShopInventory(dialogContainer.inventory);
+            interaction.Interact();
         }
         houseBackground.SetActive(true);
         UIManager.instance.currentHouse = this;
+        isActive = true;
     }
 
     public void Close()
     {
-        UIManager.instance.ShowCharacter(false);
-        UIManager.instance.ShowTownDialogGameObject(false);
+        DialogManager.instance.FinishDialog();
         UIManager.instance.choices.SetActive(false);
         houseBackground.SetActive(false);
+        isActive = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -60,13 +66,27 @@ public class House : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
         image.color = Color.white;
     }
 
-    private void Start()
-    {
-        image = GetComponent<Image>();
-    }
-
     private void Update()
     {
-        
+        if(isActive)
+        {
+            switch(houseType)
+            {
+                case HouseType.TAVERN:
+                    if (DialogManager.instance.allTextShown)
+                    {
+                        if(localAI != null && localAI.finishedInteraction)
+                        {
+                            QuestManager.instance.CheckAIVisited(localAI.aiID);
+                            Close();
+                        }
+                        else if (localAI == null)
+                        {
+                            Close();
+                        }
+                    }
+                    break;
+            }
+        }
     }
 }

@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private LineRenderer lineRenderer = null;
 
     public TownData townData = null;
-    public DialogData dialogData = null;
+    public DialogDataBank dialogData = null;
     public ItemsData itemsData = null;
     public QuestsData questsData = null;
 
@@ -39,23 +39,18 @@ public class GameManager : MonoBehaviour
 
     public Village cameraManager = null;
 
-    public GameObject storyGameObject = null;
     public Text storyText = null;
 
     public GameObject console = null;
 
-    private bool ReadyToContinue = true;
-    public GameObject clickToContinue = null;
-	private int gameStoryDialogID = 1;
-
-    private bool skipTextAnim = false;
-    private bool isInIntro = false;
+    private AI gameStoryAI = null;
 
     private void Awake()
     {
         instance = this;
         uiManager.SetActive(true);
         lineRenderer = GetComponent<LineRenderer>();
+        gameStoryAI = GetComponent<AI>();
     }
 
     private void Start()
@@ -74,58 +69,16 @@ public class GameManager : MonoBehaviour
         {
             console.SetActive(!console.activeSelf);
         }
-
-        if(Input.GetMouseButtonDown(0) && isInIntro)
-        {
-            skipTextAnim = true;
-        }
     }
 
     private IEnumerator StartIntro()
     {
         yield return new WaitForSeconds(2);
-        storyGameObject.SetActive(true);
-        storyText.text = "";
-        WaitForSeconds letterTime = new WaitForSeconds(0.05f);
-        DialogContainer gameStoryDialogContainer = dialogData.GetDialogContainerWithID(gameStoryDialogID);
-        Dialog[] storyDialog = gameStoryDialogContainer.dialog.ToArray();
-        for (int i = 0; i < storyDialog.Length; i++)
-        {
-            isInIntro = true;
-            for (int l = 0; l < storyDialog[i].dialog.Length; l++)
-            {
-                if(skipTextAnim)
-                {
-                    skipTextAnim = false;
-                    for (int l2 = l; l2 < storyDialog[i].dialog.Length; l2++)
-                    {
-                        storyText.text += storyDialog[i].dialog[l2];
-                    }
-                    break;
-                }
-                storyText.text += storyDialog[i].dialog[l];
-                yield return letterTime;
-            }
-            isInIntro = false;
-            yield return new WaitForSeconds(0.2f);
-            ReadyToContinue = false;
-            clickToContinue.SetActive(true);
-            while (!ReadyToContinue)
-            {
-                yield return null;
-            }
-            storyText.text = "";
-        }
-        InventoryManager.instance.AddGold(100);
-        QuestManager.instance.AddQuest(questsData.GetQuestWithID(0));
-        storyGameObject.SetActive(false);
+        gameStoryAI.Interact();
+        while (!gameStoryAI.finishedInteraction)
+            yield return null;
+        DialogManager.instance.FinishDialog();
         StartGame();
-    }
-
-    public void SetReadyToContinue()
-    {
-        ReadyToContinue = true;
-        clickToContinue.SetActive(false);
     }
 
     private void StartGame()

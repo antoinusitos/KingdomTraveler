@@ -9,11 +9,21 @@ public enum QuestType
     SIDE
 }
 
+public enum QuestStepRequirement
+{
+    NONE,
+    AI,
+    GOLD,
+    CITY
+}
+
 [System.Serializable]
 public struct QuestStep
 {
     public string stepObjective;
     public bool stepDone;
+    public QuestStepRequirement questStepRequirement;
+    public string stepDetail;
 }
 
 [System.Serializable]
@@ -26,6 +36,29 @@ public class Quest
     public bool questFinished = false;
     public QuestStep[] questSteps = null;
     private int stepIndex = 0;
+
+    public Quest()
+    {
+
+    }
+
+    public Quest(Quest toCopy)
+    {
+        questID = toCopy.questID;
+        questType = toCopy.questType;
+        questTitle = toCopy.questTitle;
+        questDescription = toCopy.questDescription;
+        questFinished = toCopy.questFinished;
+        questSteps = new QuestStep[toCopy.questSteps.Length];
+        for (int i = 0; i < toCopy.questSteps.Length; i++)
+        {
+            questSteps[i].stepDetail = toCopy.questSteps[i].stepDetail;
+            questSteps[i].questStepRequirement = toCopy.questSteps[i].questStepRequirement;
+            questSteps[i].stepDone = toCopy.questSteps[i].stepDone;
+            questSteps[i].stepObjective = toCopy.questSteps[i].stepObjective;
+        }
+        stepIndex = toCopy.stepIndex;
+    }
 
     public void CompleteStep()
     {
@@ -49,19 +82,50 @@ public class QuestManager : MonoBehaviour
 
     public Text questLaunchedText = null;
 
+    private List<Quest> finishedQuests = new List<Quest>();
+    private List<Quest> startedQuests = new List<Quest>();
+
+    private bool showing = false;
+
     private void Awake()
     {
         instance = this;
     }
 
+    private void Update()
+    {
+        if(showing)
+        {
+            return;
+        }
+
+        if (finishedQuests.Count > 0)
+        {
+            showing = true;
+            StartCoroutine(QuestTriggeredTimer("Finished : " + finishedQuests[0].questTitle));
+            finishedQuests.RemoveAt(0);
+        }
+        else if (startedQuests.Count > 0)
+        {
+            showing = true;
+            StartCoroutine(QuestTriggeredTimer("Started : " + startedQuests[0].questTitle));
+            startedQuests.RemoveAt(0);
+        }
+    }
+
     public void AddQuest(Quest quest)
     {
         activeQuests.Add(quest);
-        StartCoroutine(QuestTriggeredTimer("Started : " + quest.questTitle));
+        startedQuests.Add(quest);
     }
 
     public void RefreshQuests()
     {
+        for(int i = 0; i < questButtonsPanel.childCount; i++)
+        {
+            Destroy(questButtonsPanel.GetChild(i).gameObject);
+        }
+
         Instantiate(questSeparationText, questButtonsPanel);
         int questsAdded = 0;
         for (int i = 0; i < activeQuests.Count; i++)
@@ -70,7 +134,7 @@ public class QuestManager : MonoBehaviour
                 continue;
             questsAdded++;
             Button button = Instantiate(questButtonPrefab, questButtonsPanel);
-            Quest localQuest = activeQuests[i];
+            Quest localQuest = new Quest(activeQuests[i]);
             button.GetComponentInChildren<Text>().text = localQuest.questTitle;
             button.onClick.AddListener(delegate {
                 SelectQuest(localQuest);
@@ -114,5 +178,65 @@ public class QuestManager : MonoBehaviour
         }
         yield return new WaitForSeconds(2);
         questLaunchedText.text = "";
+        showing = false;
+    }
+
+    public void CheckPlaceVisited(int id)
+    {
+        for (int i = 0; i < activeQuests.Count; i++)
+        {
+            for (int s = 0; s < activeQuests[i].questSteps.Length; s++)
+            {
+                if (activeQuests[i].questSteps[s].stepDone) continue;
+
+                if (activeQuests[i].questSteps[s].questStepRequirement == QuestStepRequirement.CITY &&
+                    int.Parse(activeQuests[i].questSteps[s].stepDetail) == id)
+                {
+                    activeQuests[i].questSteps[s].stepDone = true;
+                    if(CheckQuestFinished(activeQuests[i]))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void CheckAIVisited(int id)
+    {
+        for (int i = 0; i < activeQuests.Count; i++)
+        {
+            for (int s = 0; s < activeQuests[i].questSteps.Length; s++)
+            {
+                if (activeQuests[i].questSteps[s].stepDone) continue;
+
+                if(activeQuests[i].questSteps[s].questStepRequirement == QuestStepRequirement.AI &&
+                    int.Parse(activeQuests[i].questSteps[s].stepDetail) == id)
+                {
+                    activeQuests[i].questSteps[s].stepDone = true;
+                    if (CheckQuestFinished(activeQuests[i]))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private bool CheckQuestFinished(Quest quest)
+    {
+        for (int s = 0; s < quest.questSteps.Length; s++)
+        {
+            if (!quest.questSteps[s].stepDone) 
+                return false;
+        }
+        FinishedQuest(quest);
+        return true;
+    }
+
+    public void FinishedQuest(Quest quest)
+    {
+        finishedQuests.Add(quest);
+        activeQuests.Remove(quest);
     }
 }

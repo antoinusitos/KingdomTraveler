@@ -17,17 +17,29 @@ MonoBehaviour:
     questType: 0
     questTitle: Check near towns
     questDescription: Travel and find clues about what happened to your castle
+    questFinished: 0
     questSteps:
-    - stepObjective: Get some gold
-      stepDone: 0
     - stepObjective: Travel in towns
       stepDone: 0
-  - questID: 1
-    questType: 1
-    questTitle: Side quest
+      questStepRequirement: 1
+      stepDetail: 1
+  - questID: 0
+    questType: 0
+    questTitle: Check near towns
     questDescription: Travel and find clues about what happened to your castle
+    questFinished: 0
     questSteps:
-    - stepObjective: Get some gold
-      stepDone: 0
     - stepObjective: Travel in towns
       stepDone: 0
+      questStepRequirement: 1
+      stepDetail: 1
+  - questID: 2
+    questType: 0
+    questTitle: Return to your castle
+    questDescription: Travel back to your castle
+    questFinished: 0
+    questSteps:
+    - stepObjective: Go to your castle
+      stepDone: 0
+      questStepRequirement: 3
+      stepDetail: -1

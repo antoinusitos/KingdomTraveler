@@ -1,0 +1,119 @@
+{
+	"dialogData":
+	[
+		{
+			"dialogID": 0,
+			"dialog": 
+			{
+				"dialog": "Hi ! What can I do for you ?",
+				"choices": 
+				[
+					"Buy",
+					"Leave"
+				],
+				"autoPass" : true
+			},
+			"useBlackBackground" : false
+		},
+		{
+			"dialogID": 1,
+			"dialog": 
+			{
+				"dialog": "Welcome young master and sorry for the mess in the castle.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 2,
+			"dialog": 
+			{
+				"dialog": "As you can see your parent's castle has been totally destroyed by one of our enemy.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 3,
+			"dialog": 
+			{
+				"dialog": "Your people ran away and are now dispatched everywhere.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 1,
+			"dialog": 
+			{
+				"dialog": "Welcome young master and sorry for the mess in the castle.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 4,
+			"dialog": 
+			{
+				"dialog": "I've marked on your map some locations around the castle to start your investigations.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 5,
+			"dialog": 
+			{
+				"dialog": "And please find something more serious to wear, people won't follow you and you won't last long wearing that...",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 6,
+			"dialog": 
+			{
+				"dialog": "I gave you some money to start but you will have to find more by yourself.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 7,
+			"dialog": 
+			{
+				"dialog": "Good luck !",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 8,
+			"dialog": 
+			{
+				"dialog": "Hi Sir, I'm very happy to see you.",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		},
+		{
+			"dialogID": 9,
+			"dialog": 
+			{
+				"dialog": "I'm a villager and I can join your kingdom",
+				"choices": [],
+				"autoPass" : false
+			},
+			"useBlackBackground" : true
+		}
+	]
+}

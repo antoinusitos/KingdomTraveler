@@ -80,6 +80,7 @@ public class Village : MonoBehaviour
                         }
                         currentMaxDangerosity = 0;
                         UIManager.instance.BlockTown(true);
+                        UIManager.instance.currentTown = location;
                         goTo = StartCoroutine(GoTo(path));
                     }
                 }
@@ -173,6 +174,7 @@ public class Village : MonoBehaviour
                 GameManager.instance.SetCurrentLinePos(player.transform.position);
                 player.transform.position = Vector3.MoveTowards(player.transform.position, end, Time.deltaTime * speed * InventoryManager.instance.horseSpeed);
                 dist = Vector3.Distance(player.transform.position, end);
+                SeasonManager.instance.MoveForward();
                 yield return null;
             }
             if(i > 0)

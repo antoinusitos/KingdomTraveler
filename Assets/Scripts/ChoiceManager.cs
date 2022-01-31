@@ -30,6 +30,7 @@ public class ChoiceManager : MonoBehaviour
                 temp.GetComponent<Button>().onClick.AddListener(delegate
                 {
                     UIManager.instance.CloseHouse();
+                    DialogManager.instance.FinishDialog();
                 });
             }
             else if (someChoices[i] == "Buy")

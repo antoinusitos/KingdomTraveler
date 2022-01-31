@@ -22,10 +22,6 @@ public class UIManager : MonoBehaviour
     public RectTransform starsPage = null;
     public RectTransform questPage = null;
 
-    public Text townDialogText = null;
-    public GameObject townDialogGameObject = null;
-    public GameObject characterGameObject = null;
-
     private RectTransform pageToShow = null;
     private RectTransform nextPageToShow = null;
     private bool mustShow = true;
@@ -77,6 +73,12 @@ public class UIManager : MonoBehaviour
 
     private const float borderSize = 40;
 
+    [HideInInspector]
+    public Location currentTown = null;
+    public Transform townsParent = null;
+    public TownData townsData = null;
+    private GameObject lastShowTown = null;
+
     private void Awake()
     {
         instance = this;
@@ -122,6 +124,7 @@ public class UIManager : MonoBehaviour
             lastButton = townButton;
             GameManager.instance.lastPageType = GameManager.instance.currentPageType;
             GameManager.instance.currentPageType = PageType.TOWN;
+            ShowRightTown();
         }
         else if (page == 1)
         {
@@ -163,11 +166,45 @@ public class UIManager : MonoBehaviour
         {
             mapButton.interactable = false;
             lastButton = mapButton;
+            if(lastShowTown != null)
+            {
+                lastShowTown.SetActive(false);
+                lastShowTown = null;
+            }
             GameManager.instance.lastPageType = GameManager.instance.currentPageType;
             GameManager.instance.currentPageType = PageType.INVENTORY;
         }
         MusicManager.instance.PlayActionSound();
         HiddeAllPages();
+    }
+
+    public void ShowRightTown()
+    {
+        if(lastShowTown != null)
+        {
+            return;
+        }
+
+        QuestManager.instance.CheckPlaceVisited(currentTown.townID);
+
+        if(currentTown.townID == -1)
+        {
+            //castle
+        }
+        else
+        {
+            TownContainer targetTown = townsData.GetTownContainerWithID(currentTown.townID);
+            for(int i = 0; i < townsParent.childCount; i++)
+            {
+                if (townsParent.GetChild(i).name == targetTown.townName)
+                {
+                    lastShowTown = townsParent.GetChild(i).gameObject;
+                    lastShowTown.SetActive(true);
+                    houseText = lastShowTown.transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
+                    return;
+                }
+            }
+        }
     }
 
     public void RemoveEquippedItem(GameItemType aType, BodyPart aPart = BodyPart.NONE)
@@ -716,24 +753,9 @@ public class UIManager : MonoBehaviour
         currentHouse.Close();
     }
 
-    public void SetTownDialogText(string aText)
-    {
-        townDialogText.text = aText;
-    }
-
     public void SetHouseName(string aName)
     {
         houseText.text = aName;
-    }
-
-    public void ShowCharacter(bool aState)
-    {
-        characterGameObject.SetActive(aState);
-    }
-
-    public void ShowTownDialogGameObject(bool aState)
-    {
-        townDialogGameObject.SetActive(aState);
     }
     #endregion
 }
